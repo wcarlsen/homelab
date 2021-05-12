@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: keycloak
+spec:
+  destination:
+    name: ''
+    namespace: keycloak
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: ''
+    repoURL: 'https://codecentric.github.io/helm-charts'
+    targetRevision: 11.0.0
+    chart: keycloak
+    helm:
+      parameters:
+        - name: extraEnv
+          value: |
+            - name: PROXY_ADDRESS_FORWARDING
+              value: 'true'
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
